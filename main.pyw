@@ -4,21 +4,14 @@ import tkinter as tk
 import threading
 import queue
 from blivedm import blivedm
-"""
-在下面更改ROOM_ID为自己的直播间ID
-"""
+
+gui_queue = queue.Queue()
 ROOM_ID = 22605466
-
-
 TEST_ROOM_KURI = 22918711
 TEST_ROOM_JINGGEGE = 704808
 TEST_ROOM_AZA = 21696950
 TEST_ROOM_MIELI = 8792912
 TEST_ROOM_WUMI = 22384516
-
-
-
-gui_queue = queue.Queue()
 REVERT_LIST = []  # 撤销礼物删除
 GIFT_STAT = 0.0  # 追踪流水信息
 RECENT_GIFT = []
@@ -59,7 +52,7 @@ class MyBLiveClient(blivedm.BLiveClient):
             if price >= 0.1:
                 b = Button(bottomframe, text=f'{gift.uname} 赠送{gift.gift_name}x{gift.num} （{price}元）', command=lambda: remove_gift(b))
                 GIFT_STAT += price
-                stat_label_text.set("流水: "+"{:.2f}".format(GIFT_STAT))
+                stat_label_text.set("流水: "+str(GIFT_STAT))
                 b.pack(fill=X, pady=5)
             # print(f'>>>>>>{gift.uname} 赠送{gift.gift_name}x{gift.num} （{price}元）<<<<<<')
 
@@ -68,7 +61,7 @@ class MyBLiveClient(blivedm.BLiveClient):
         price = round(message.price * 0.001, 3)
         b = Button(bottomframe, text=f'>>>购买舰长:{message.username} {message.gift_name} ¥{price}<<<', command=lambda: remove_gift(b))
         GIFT_STAT += price
-        stat_label_text.set("流水: "+"{:.2f}".format(GIFT_STAT))
+        stat_label_text.set("流水: "+str(GIFT_STAT))
         b.pack(fill=X, pady=5)
         # print(f'舰长>>>>>>{message.username} 购买{message.gift_name}<<<<<<')
 
@@ -77,7 +70,7 @@ class MyBLiveClient(blivedm.BLiveClient):
         b = Button(bottomframe, highlightbackground=message.background_price_color,
                    text=f'SC ¥{message.price}{message.uname}：\n>>>{message.message}<<<', command=lambda: remove_gift(b))
         GIFT_STAT += message.price
-        stat_label_text.set("流水: "+"{:.2f}".format(GIFT_STAT))
+        stat_label_text.set("流水: "+str(GIFT_STAT))
         b.pack(fill=X, pady=5)
         # print(f'SuperChat>>>>>> ¥{message.price} {message.uname}：{message.message}<<<<<<')
 
@@ -129,10 +122,6 @@ bottomframe.pack(side=BOTTOM, fill=X)
 b = Button(topframe, text="撤销删除", fg="red", command=lambda: revert_delete(bottomframe))
 b.pack(side=tk.LEFT, fill=BOTH, padx=10)
 
-room_label_text = StringVar()
-room_label_text.set("当前直播间:" + str(ROOM_ID))
-room_label_text = Label(topframe, textvariable=room_label_text, relief=RAISED)
-room_label_text.pack(side=tk.LEFT, fill=BOTH, padx=10)
 
 stat_label_text = StringVar()
 stat_label_text.set("流水: "+str(GIFT_STAT))
