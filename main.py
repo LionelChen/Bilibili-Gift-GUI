@@ -9,13 +9,13 @@ from blivedm import blivedm
 """
 ROOM_ID = 22605466
 
-
+"""
 TEST_ROOM_KURI = 22918711
 TEST_ROOM_JINGGEGE = 704808
 TEST_ROOM_AZA = 21696950
 TEST_ROOM_MIELI = 8792912
 TEST_ROOM_WUMI = 22384516
-
+"""
 
 
 gui_queue = queue.Queue()
@@ -87,7 +87,7 @@ async def danmu_print():
     # 如果SSL验证失败就把ssl设为False
 
     #22605466
-    client = MyBLiveClient(TEST_ROOM_WUMI, ssl=True)
+    client = MyBLiveClient(ROOM_ID, ssl=True)
     future = client.start()
     try:
         await future
